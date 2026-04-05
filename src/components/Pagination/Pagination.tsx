@@ -2,14 +2,14 @@ import { getNumbers } from '../../utils';
 
 interface PaginationProps {
   perPage: number;
-  currentPage: number;
+  currentPage?: number;
   total: number;
   onPageChange: (page: number) => void;
 }
 
 export const Pagination: React.FC<PaginationProps> = ({
   perPage,
-  currentPage,
+  currentPage = 1,
   total,
   onPageChange,
 }) => {
@@ -23,7 +23,11 @@ export const Pagination: React.FC<PaginationProps> = ({
         data-cy="pageLink"
         className="page-link"
         href={`#${page}`}
-        onClick={() => onPageChange(page)}
+        onClick={(e) => {
+          e.preventDefault();
+          if (page === currentPage) return;
+          onPageChange(page);
+        }}
       >
         {page}
       </a>
@@ -38,7 +42,8 @@ export const Pagination: React.FC<PaginationProps> = ({
           className="page-link"
           href="#prev"
           aria-disabled={currentPage === 1 ? 'true' : 'false'}
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             if (currentPage === 1) {
               return;
             }
@@ -60,7 +65,8 @@ export const Pagination: React.FC<PaginationProps> = ({
           className="page-link"
           href="#next"
           aria-disabled={currentPage === totalPages ? 'true' : 'false'}
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             if (currentPage === totalPages) {
               return;
             }
